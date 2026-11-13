@@ -1,0 +1,30 @@
+/* New Tab: the scene fills the empty tab; Obsidian's own empty-tab buttons hide under it */
+body.eh-on .eh-newtab-host { position: relative; padding: 0; overflow: hidden; }
+body.eh-on .eh-newtab-host > :not(.eh-newtab) { display: none; }
+body.eh-on .eh-newtab { position: absolute; inset: 0; color: #eef3fc; font-family: var(--eh-font-ui); background: #030406; color-scheme: dark; }
+body.eh-on .eh-sky { position: absolute; inset: 0; width: 100%; height: 100%; }
+body.eh-on .eh-veil { position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg, rgba(3,4,6,.55) 0%, rgba(3,4,6,0) 30%, rgba(3,4,6,0) 62%, rgba(3,4,6,.6) 100%); }
+body.eh-on .eh-head { position: absolute; left: clamp(24px, 6%, 96px); top: clamp(24px, 8%, 88px); animation: eh-nt-rise 1.4s cubic-bezier(.2,.7,.2,1) both; }
+body.eh-on .eh-time { margin: 0; font-weight: 200; font-size: clamp(64px, 10vw, 160px); line-height: .92; letter-spacing: -.02em; color: #eef3fc;
+  font-variant-numeric: tabular-nums; text-shadow: 0 0 40px rgba(169, 200, 255, .25); }
+body.eh-on .eh-kicker { margin: 18px 0 0; font-family: var(--eh-font-label); font-size: 12px; letter-spacing: .38em;
+  text-transform: uppercase; color: rgba(223, 231, 245, .62); }
+body.eh-on .eh-greet { margin: 0 0 14px; color: var(--eh-accent); }
+body.eh-on .eh-dock { position: absolute; left: 50%; bottom: clamp(20px, 8%, 80px); transform: translateX(-50%); width: min(620px, calc(100% - 32px));
+  animation: eh-nt-rise 1.4s .15s cubic-bezier(.2,.7,.2,1) both; }
+body.eh-on .eh-newtab .eh-q { width: 100%; height: auto; padding: 16px 22px; border-radius: 16px; font: inherit; font-size: 16px; color: #eef3fc;
+  background: rgba(8, 10, 16, .46); border: 1px solid rgba(169, 200, 255, .16); box-shadow: none;
+  -webkit-backdrop-filter: blur(22px) saturate(1.4); backdrop-filter: blur(22px) saturate(1.4); transition: border-color .3s, box-shadow .3s, background .3s; }
+body.eh-on .eh-newtab .eh-q::placeholder { color: rgba(223, 231, 245, .62); }
+body.eh-on .eh-newtab .eh-q:focus { border-color: rgba(169, 200, 255, .55); background: rgba(8, 10, 16, .62);
+  box-shadow: 0 0 0 4px rgba(169, 200, 255, .08), 0 20px 60px rgba(91, 140, 255, .18); }
+body.eh-on .eh-recent { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+body.eh-on .eh-newtab .eh-recent button { height: auto; padding: 7px 14px; border-radius: 99px; font: inherit; font-size: 13px; color: #d6deec; cursor: pointer;
+  background: rgba(8, 10, 16, .46); border: 1px solid rgba(169, 200, 255, .16); box-shadow: none;
+  max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); transition: translate .25s cubic-bezier(.2,.7,.2,1), border-color .25s, background .25s; }
+body.eh-on .eh-newtab .eh-recent button:hover { translate: 0 -2px; border-color: rgba(169, 200, 255, .5); background: rgba(20, 26, 40, .6); }
+@keyframes eh-nt-rise { from { opacity: 0; translate: 0 14px; } }
+body.eh-on.eh-no-motion :is(.eh-head, .eh-dock) { animation: none; }
+@media (prefers-reduced-motion: reduce) { body.eh-on :is(.eh-head, .eh-dock) { animation: none; } }

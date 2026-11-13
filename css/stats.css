@@ -1,56 +1,73 @@
-/* ============================ statistics panel ============================ */
-.theme-light { --eh-h0: #efe4e1; --eh-h1: #ffd3d9; --eh-h2: #ff9aa8; --eh-h3: #ff5a6f; --eh-h4: #c8102e; }
-.theme-dark  { --eh-h0: #2f2629; --eh-h1: #5a2a35; --eh-h2: #8f3446; --eh-h3: #d24a60; --eh-h4: #ff7d8f; }
+/* ============================ statistics panel ============================
+   Always Event Horizon: the panel carries its own dark surface so the ice ramp reads in either Obsidian mode. */
+body.eh-on {
+  --eh-h0: rgba(169, 200, 255, .07); --eh-h1: rgba(169, 200, 255, .22); --eh-h2: rgba(169, 200, 255, .45);
+  --eh-h3: #a9c8ff; --eh-h4: #f4f7ff;
+}
 
-.workspace-leaf-content .view-content.eh-stats { padding: 22px 20px 40px; font-family: var(--font-text); }
-.eh-eyebrow { font-family: var(--font-interface); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--text-faint); }
-.eh-stats-title { font-family: "Event Horizon Fraunces", "Fraunces", var(--font-text); font-style: italic; font-size: 34px; line-height: 1.1; color: var(--text-normal);
-  font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144, "wght" 380; margin: 2px 0 14px; }
+.workspace-leaf-content .view-content.eh-stats {
+  color-scheme: dark;
+  --text-normal: #d6deec; --text-muted: #8592ab; --text-faint: #4f5b72;
+  padding: 22px 20px 40px; font-family: var(--eh-font-ui); color: var(--text-normal);
+  background: radial-gradient(120% 50% at 50% 0%, rgba(91, 140, 255, .07), transparent 70%), var(--eh-void);
+}
+.eh-eyebrow { font-family: var(--eh-font-label); font-size: 10.5px; letter-spacing: .3em; text-transform: uppercase; color: var(--text-faint); }
+.eh-stats-title { font-family: var(--eh-font-ui); font-weight: 200; font-size: 34px; line-height: 1.1; letter-spacing: .02em; color: var(--eh-white);
+  text-shadow: 0 0 28px rgba(169, 200, 255, .3); margin: 2px 0 14px; }
 
 .eh-today { position: relative; width: 168px; height: 168px; margin: 6px auto 18px; }
 .eh-today svg { width: 100%; height: 100%; transform: rotate(-90deg); }
 .eh-today circle { fill: none; stroke-width: 5; }
 .eh-big-bg { stroke: var(--eh-h0); }
-.eh-big-fg { stroke-dasharray: var(--dash); stroke-dashoffset: var(--off); stroke: var(--eh-accent, #ff5a6f); stroke-linecap: round; transition: stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1);
-  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--eh-accent, #ff5a6f) 45%, transparent)); }
+.eh-big-fg { stroke-dasharray: var(--dash); stroke-dashoffset: var(--off); stroke: var(--eh-accent); stroke-linecap: round; transition: stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1);
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--eh-accent) 45%, transparent)); }
 .eh-today-mid { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-.eh-today-num { font-family: "Event Horizon Fraunces", "Fraunces", var(--font-text); font-size: 44px; line-height: 1; color: var(--text-normal);
-  font-variation-settings: "SOFT" 100, "WONK" 0, "opsz" 144, "wght" 420; font-variant-numeric: tabular-nums; }
-.eh-today-sub { font-size: 12px; color: var(--text-muted); font-style: italic; margin-top: 4px; }
+.eh-today-num { font-family: var(--eh-font-ui); font-weight: 200; font-size: 44px; line-height: 1; color: var(--eh-white); font-variant-numeric: tabular-nums; }
+.eh-today-sub { font-family: var(--eh-font-label); font-size: 10.5px; letter-spacing: .24em; text-transform: uppercase; color: var(--text-muted); margin-top: 6px; }
 
 .eh-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 22px; }
-.eh-tile { padding: 10px 8px 9px; border-radius: 12px; text-align: center; background: color-mix(in srgb, var(--eh-accent, #ff5a6f) 6%, transparent); }
-.eh-tile-value { font-family: "Event Horizon Fraunces", "Fraunces", var(--font-text); font-size: 21px; line-height: 1.1; color: var(--text-normal);
-  font-variation-settings: "SOFT" 100, "opsz" 72, "wght" 450; font-variant-numeric: tabular-nums; }
-.eh-tile-label { font-family: var(--font-interface); font-size: 10px; letter-spacing: .05em; color: var(--text-muted); margin-top: 3px; }
-.eh-tile { transition: transform .3s cubic-bezier(.2,.8,.2,1), background .3s ease; }
-.eh-tile:hover { transform: translateY(-2px); background: color-mix(in srgb, var(--eh-accent, #ff5a6f) 12%, transparent); }
+.eh-tile { padding: 10px 8px 9px; border-radius: 12px; text-align: center; background: rgba(169, 200, 255, .04); border: 1px solid rgba(169, 200, 255, .08);
+  transition: transform .3s cubic-bezier(.2,.8,.2,1), background .3s ease, border-color .3s ease; }
+.eh-tile:hover { transform: translateY(-2px); background: rgba(169, 200, 255, .08); border-color: rgba(169, 200, 255, .2); }
+.eh-tile-value { font-family: var(--eh-font-ui); font-weight: 200; font-size: 22px; line-height: 1.1; color: var(--eh-white); font-variant-numeric: tabular-nums; }
+.eh-tile-label { font-family: var(--eh-font-label); font-size: 9.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--text-muted); margin-top: 4px; }
 
 .eh-section { margin-top: 20px; }
-.eh-section-title { font-family: var(--font-interface); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 10px; }
+.eh-section-title { font-family: var(--eh-font-label); font-size: 10.5px; letter-spacing: .3em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 10px; }
 
+/* heatmap: from barely there to white-hot with an ember rim */
 .eh-heat { display: grid; grid-template-rows: repeat(7, 1fr); grid-auto-flow: column; grid-auto-columns: 1fr; gap: 3px; }
 .eh-cell { aspect-ratio: 1; border-radius: 3px; background: var(--eh-h0); }
 .eh-cell.l1 { background: var(--eh-h1); } .eh-cell.l2 { background: var(--eh-h2); }
-.eh-cell.l3 { background: var(--eh-h3); } .eh-cell.l4 { background: var(--eh-h4); box-shadow: 0 0 6px -1px var(--eh-h4); }
+.eh-cell.l3 { background: var(--eh-h3); box-shadow: 0 0 5px -1px rgba(169, 200, 255, .6); }
+.eh-cell.l4 { background: var(--eh-h4); box-shadow: 0 0 7px -1px rgba(255, 91, 56, .75); }
 .eh-cell.l-1 { background: transparent; }
-.eh-heat .eh-cell { transition: transform .2s ease; }
-.eh-heat .eh-cell:not(.l-1):hover { transform: scale(1.35); }
-.eh-heat-legend { display: flex; align-items: center; justify-content: flex-end; gap: 3px; margin-top: 8px; font-family: var(--font-interface); font-size: 10px; color: var(--text-faint); }
+.eh-heat .eh-cell { transition: transform .2s ease, box-shadow .2s ease; }
+.eh-heat .eh-cell:not(.l-1):is(:hover, .is-hover) { transform: scale(1.3); box-shadow: 0 0 0 1px rgba(169, 200, 255, .75), 0 0 8px rgba(169, 200, 255, .45); }
+.eh-heat-legend { display: flex; align-items: center; justify-content: flex-end; gap: 3px; margin-top: 8px; font-family: var(--eh-font-label); font-size: 10px; color: var(--text-faint); }
 .eh-heat-legend .eh-cell { width: 10px; }
 .eh-heat-legend span { margin: 0 4px; }
 
+/* bars: blue into ice; a day that reached the goal runs blue → white → ember */
 .eh-bars { position: relative; display: flex; align-items: flex-end; gap: 4px; height: 110px; padding-top: 4px; }
-.eh-bar-col { flex: 1; height: 100%; display: flex; align-items: flex-end; cursor: default; }
-.eh-bar { height: var(--h); width: 100%; min-height: 2px; border-radius: 4px 4px 1px 1px; background: var(--eh-h2); transform-origin: bottom; }
-.eh-bar.is-goal { background: var(--eh-accent, #ff5a6f); }
-.eh-bar-col:hover .eh-bar { background: var(--eh-h3); }
-.eh-bar-col:hover .eh-bar.is-goal { filter: brightness(1.1); }
-.eh-goal-line { bottom: var(--goal); position: absolute; left: 0; right: 0; border-top: 1px dashed var(--text-faint); opacity: .7; pointer-events: none; }
-.eh-goal-line span { position: absolute; right: 0; top: -15px; font-family: var(--font-interface); font-size: 9.5px; color: var(--text-faint); }
-.eh-bars-axis { display: flex; justify-content: space-between; margin-top: 6px; font-family: var(--font-interface); font-size: 10px; color: var(--text-faint); }
+.eh-bar-col { flex: 1; height: 100%; display: flex; align-items: flex-end; cursor: default; border-radius: 4px; }
+.eh-bar { height: var(--h); width: 100%; min-height: 2px; border-radius: 4px 4px 1px 1px; transform-origin: bottom;
+  background: linear-gradient(0deg, rgba(91, 140, 255, .55), rgba(169, 200, 255, .8)); transition: box-shadow .2s ease, filter .2s ease; }
+.eh-bar.is-goal { background: linear-gradient(0deg, var(--eh-blue), var(--eh-white) 65%, var(--eh-ember)); box-shadow: 0 0 8px -2px rgba(255, 91, 56, .6); }
+.eh-bar-col:is(:hover, .is-hover) .eh-bar { filter: brightness(1.15); box-shadow: 0 0 0 1px rgba(169, 200, 255, .7), 0 0 10px rgba(169, 200, 255, .45); }
+.eh-goal-line { bottom: var(--goal); position: absolute; left: 0; right: 0; border-top: 1px dashed rgba(169, 200, 255, .3); pointer-events: none; }
+.eh-goal-line span { position: absolute; right: 0; top: -15px; font-family: var(--eh-font-label); font-size: 9.5px; letter-spacing: .12em; color: var(--text-faint); }
+.eh-bars-axis { display: flex; justify-content: space-between; margin-top: 6px; font-family: var(--eh-font-label); font-size: 10px; letter-spacing: .1em; color: var(--text-faint); }
 
-.eh-note-name { font-family: "Event Horizon Fraunces", "Fraunces", var(--font-text); font-style: italic; font-size: 18px; color: var(--text-normal); }
+/* hover readout under the heatmap and the bars: one calm line, fixed height so the panel never jumps */
+.eh-readout { display: flex; align-items: baseline; gap: 10px; height: 20px; margin-top: 8px; overflow: hidden; white-space: nowrap; }
+.eh-readout-date { font-family: var(--eh-font-label); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--text-muted); }
+.eh-readout-words { font-family: var(--eh-font-ui); font-size: 13px; color: var(--eh-ice); font-variant-numeric: tabular-nums; }
+.eh-readout-extra { font-family: var(--eh-font-ui); font-size: 12px; color: var(--text-muted); min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.eh-readout.is-empty > span:first-child { color: var(--text-faint); }
+.eh-readout.is-empty > span:not(:first-child) { display: none; }
+
+.eh-note-name { font-family: var(--eh-font-ui); font-weight: 300; font-size: 18px; color: var(--eh-white); }
 .eh-note-meta { font-size: 12.5px; color: var(--text-muted); margin-top: 2px; }
 
 /* entrance: cells ripple in, bars grow, tiles rise */
@@ -63,4 +80,3 @@
 @keyframes eh-cell-in { from { opacity: 0; transform: scale(.3); } }
 @keyframes eh-bar-in { from { transform: scaleY(0); } }
 @keyframes eh-tile-in { from { opacity: 0; transform: translateY(10px); } }
-
