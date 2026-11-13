@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { computeStats, countWords, dayKey, heatLevel, stripFrontmatter } from "../src/stats.ts";
+import { computeStats, countWords, dayKey, dayReadout, heatLevel, stripFrontmatter } from "../src/stats.ts";
 
 const ago = (n: number) => { const d = new Date(2026, 10, 7); d.setDate(d.getDate() - n); return dayKey(d); };
 const now = new Date(2026, 10, 7, 12);
@@ -31,4 +31,10 @@ test("heat levels against the goal", () => {
 
 test("words ignore frontmatter", () => {
 	assert.equal(countWords(stripFrontmatter("---\ntitle: x\nauthor: y\n---\nOne two  three\nfour")), 4);
+});
+
+test("hover readout text", () => {
+	assert.deepEqual(dayReadout(412, 18 * 60, 500), { words: "412 words", extra: "18 min · 82% of goal" });
+	assert.deepEqual(dayReadout(600, 20, 500), { words: "600 words", extra: "goal reached" });
+	assert.deepEqual(dayReadout(1, 0, 500), { words: "1 word", extra: "0% of goal" });
 });

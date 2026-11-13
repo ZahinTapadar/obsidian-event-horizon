@@ -1,7 +1,7 @@
 {
 	"name": "obsidian-event-horizon",
 	"version": "1.0.0",
-	"description": "An animated, rewarding writing pad and book-style reader for Obsidian.",
+	"description": "Deep-space look, writing rewards, glass reading pages, writing statistics and a living black hole new tab for Obsidian.",
 	"main": "main.js",
 	"scripts": {
 		"build:css": "node scripts/build-css.mjs",
@@ -14,7 +14,9 @@
 		"writing",
 		"theme",
 		"typewriter",
-		"statistics"
+		"statistics",
+		"new tab",
+		"space"
 	],
 	"author": "Zahin Tapadar",
 	"license": "MIT",

@@ -1,10 +1,14 @@
 import { MarkdownView, Plugin, TAbstractFile, TFile, WorkspaceWindow, debounce, editorInfoField, setTooltip } from "obsidian";
 import { EditorView, ViewUpdate } from "@codemirror/view";
-import { DEFAULT_SETTINGS, EventHorizonSettingTab, EventHorizonSettings } from "./settings";
+import { DEFAULT_SETTINGS, EventHorizonSettingTab, EventHorizonSettings, ICE } from "./settings";
+import { NewTabs } from "./newtab";
 import { STATS_VIEW, StatsView } from "./stats-view";
 import { Day, countWords, dayKey, stripFrontmatter } from "./stats";
 
-const GLYPHS = ["•", "•", "·", "✦", "❤", "✿"];
+const GLYPHS = ["•", "•", "·", "✦", "✧"];
+const ICE_LIGHT = ["#a9c8ff", "#f4f7ff", "#cfe0ff"];
+const EMBER = ["#ff5b38", "#ff8f4f"];
+const pick = <T>(xs: T[]): T => xs[Math.floor(Math.random() * xs.length)];
 const READ_WPM = 230;
 const IDLE_MS = 20000; // a pause longer than this does not count as writing time
 const fmt = (n: number) => n.toLocaleString();
@@ -33,6 +37,7 @@ export default class EventHorizonPlugin extends Plugin {
 	private mainDoc!: Document;
 	private docs = new Set<Document>(); // main window plus any popouts, for body classes
 	private requestSave = debounce(() => void this.saveSettings(), 1500, true);
+	private newTabs = new NewTabs(this.app, () => this.settings.newTab);
 	private refreshStats = debounce(() => this.statsViews().forEach((v) => v.render(false)), 400, false);
 
 	async onload(): Promise<void> {
@@ -75,7 +80,7 @@ export default class EventHorizonPlugin extends Plugin {
 
 		this.registerView(STATS_VIEW, (leaf) => new StatsView(leaf, this));
 		this.registerMarkdownPostProcessor((el) => markAttribution(el));
-		this.addRibbonIcon("flower-2", "Open writing statistics", () => void this.openStats());
+		this.addRibbonIcon("orbit", "Open writing statistics", () => void this.openStats());
 		this.addCommand({ id: "open-statistics", name: "Open writing statistics", callback: () => void this.openStats() });
 		this.addCommand({ id: "toggle-reading-mode", name: "Toggle Reading mode", callback: () => void this.setReading(!this.reading) });
 		this.addCommand({ id: "toggle-reading-page", name: "Switch reading page between paper and night", callback: () => this.togglePage() });
@@ -93,13 +98,15 @@ export default class EventHorizonPlugin extends Plugin {
 		this.registerEvent(this.app.workspace.on("layout-change", reset));
 		this.registerEvent(this.app.workspace.on("active-leaf-change", () => { reset(); if (this.reading) void this.applyModeToActive(); this.refreshStats(); }));
 		this.registerEvent(this.app.workspace.on("file-open", () => { if (this.reading) window.setTimeout(() => void this.applyModeToActive(), 30); }));
-		this.app.workspace.onLayoutReady(() => { this.restoreSides(); void this.watchVault(); });
+		this.app.workspace.onLayoutReady(() => { this.restoreSides(); void this.watchVault(); this.newTabs.sync(); });
+		this.registerEvent(this.app.workspace.on("layout-change", () => this.newTabs.sync()));
 		this.addSettingTab(new EventHorizonSettingTab(this.app, this));
 	}
 
 	onunload(): void {
+		this.newTabs.destroy();
 		[this.layer, this.caret, this.progress, this.folio].forEach((el) => el.remove());
-		for (const doc of this.docs) doc.body.removeClass("event-horizon", "eh-no-motion", "eh-no-aurora", "eh-no-grain", "eh-custom-accent", "eh-calm", "eh-glide", "eh-typewriter", "eh-reading", "eh-page-night");
+		for (const doc of this.docs) doc.body.removeClass("eh-on", "event-horizon", "eh-no-motion", "eh-custom-accent", "eh-calm", "eh-glide", "eh-typewriter", "eh-reading", "eh-page-night");
 	}
 
 	async loadSettings(): Promise<void> {
@@ -153,17 +160,16 @@ export default class EventHorizonPlugin extends Plugin {
 	applyAppearance(): void {
 		const s = this.settings, calm = this.isCalm();
 		for (const { body: b } of this.docs) {
+			b.addClass("eh-on");
 			b.toggleClass("event-horizon", s.look);
 			b.toggleClass("eh-no-motion", !s.motion || calm); // the look's animations are all gated on this
-			b.toggleClass("eh-no-aurora", !s.aurora);
-			b.toggleClass("eh-no-grain", !s.grain);
 			b.toggleClass("eh-calm", calm);
 			b.toggleClass("eh-glide", s.glide && !calm);
 			b.toggleClass("eh-typewriter", s.typewriter);
 			b.toggleClass("eh-custom-accent", !!s.accent);
 			b.toggleClass("eh-page-night", this.isNightPage());
 			b.setCssProps({
-				"--eh-accent-user": s.accent || "#ff5a6f",
+				"--eh-accent-user": s.accent || ICE,
 				"--eh-measure": `${s.measure}em`,
 				"--eh-font-size": `${s.fontSize}px`,
 				"--eh-line-height": `${s.lineHeight}`,
@@ -172,6 +178,7 @@ export default class EventHorizonPlugin extends Plugin {
 		this.renderPageToggle();
 		this.renderRing?.();
 		this.refreshStats?.();
+		if (this.app.workspace.layoutReady) this.newTabs.sync(); // settings changes land here
 	}
 
 	private day(key = dayKey()): Day {
@@ -180,7 +187,7 @@ export default class EventHorizonPlugin extends Plugin {
 		return h[key];
 	}
 
-	// ---- writing: caret, petals, milestones, typewriter ---------------------
+	// ---- writing: caret, stardust, milestones, typewriter ---------------------
 	private onUpdate(u: ViewUpdate): void {
 		const edited = u.docChanged && u.transactions.some((t) => t.isUserEvent("input") || t.isUserEvent("delete"));
 		const typed = u.docChanged && u.transactions.some((t) => t.isUserEvent("input.type"));
@@ -265,7 +272,7 @@ export default class EventHorizonPlugin extends Plugin {
 	}
 
 	private typeBurst(x: number, y: number): void {
-		if (!this.settings.petals || this.isCalm()) return;
+		if (!this.settings.stardust || this.isCalm()) return;
 		const now = performance.now();
 		if (now - this.lastBurst < 45) return;
 		this.lastBurst = now;
@@ -274,18 +281,19 @@ export default class EventHorizonPlugin extends Plugin {
 
 	private spawn(x: number, y: number, n: number, big: boolean): void {
 		for (let i = 0; i < n; i++) {
-			const p = this.layer.createSpan({ cls: "eh-p", text: GLYPHS[Math.floor(Math.random() * GLYPHS.length)] });
+			const p = this.layer.createSpan({ cls: "eh-p", text: pick(GLYPHS) });
+			// small bursts drift upward from the caret, milestone bursts fan out radially
 			const ang = big ? Math.random() * Math.PI * 2 : -Math.PI / 2 + (Math.random() - 0.5) * 1.6;
 			const dist = big ? 80 + Math.random() * 220 : 12 + Math.random() * 26;
 			p.setCssProps({
 				"--x": `${x}px`,
 				"--y": `${y}px`,
 				"--dx": `${Math.cos(ang) * dist}px`,
-				"--dy": `${Math.sin(ang) * dist + (big ? 60 : 0)}px`,
+				"--dy": `${Math.sin(ang) * dist}px`,
 				"--r": `${(Math.random() - 0.5) * 240}deg`,
 				"--s": `${big ? 10 + Math.random() * 14 : 6 + Math.random() * 6}px`,
 				"--t": `${big ? 1.2 + Math.random() * 0.8 : 0.55 + Math.random() * 0.35}s`,
-				"--h": `${340 + Math.random() * 30}`,
+				"--c": Math.random() < 0.7 ? pick(ICE_LIGHT) : pick(EMBER),
 			});
 			p.addEventListener("animationend", () => p.remove(), { once: true });
 		}
@@ -306,7 +314,7 @@ export default class EventHorizonPlugin extends Plugin {
 
 	private toast(text: string, sub?: string): void {
 		const t = this.layer.createDiv({ cls: "eh-toast" });
-		t.createSpan({ cls: "eh-orn", text: "— ❦ —" });
+		t.createSpan({ cls: "eh-orn", text: "— ✦ —" });
 		t.createSpan({ cls: "eh-toast-text", text });
 		if (sub) t.createSpan({ cls: "eh-toast-sub", text: sub });
 		t.addEventListener("animationend", () => t.remove(), { once: true });
@@ -419,7 +427,7 @@ export default class EventHorizonPlugin extends Plugin {
 
 	private renderModePill(): void {
 		this.modeEl.empty();
-		this.modeEl.createSpan({ cls: "eh-mode-glyph", text: this.reading ? "❦" : "✎" });
+		this.modeEl.createSpan({ cls: "eh-mode-glyph", text: this.reading ? "✦" : "✎" });
 		this.modeEl.createSpan({ text: this.reading ? "Reading" : "Writing" });
 		this.modeEl.toggleClass("is-reading", this.reading);
 		setTooltip(this.modeEl, this.reading ? "Back to Writing (Esc)" : "Read as a book", { placement: "top" });

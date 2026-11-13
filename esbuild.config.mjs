@@ -13,6 +13,7 @@ const context = await esbuild.context({
 	logLevel: "info",
 	sourcemap: prod ? false : "inline",
 	treeShaking: true,
+	loader: { ".jpg": "dataurl" }, // Obsidian installs only main.js/manifest.json/styles.css, so the new-tab photo rides inside main.js
 	outfile: "main.js",
 	minify: prod,
 });

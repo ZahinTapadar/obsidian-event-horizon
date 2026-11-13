@@ -56,3 +56,11 @@ export function heatLevel(words: number, goal: number, future: boolean): number 
 	if (words < goal) return 3;
 	return 4;
 }
+
+/** The hover readout under the heatmap and bars: "412 words", "18 min · 82% of goal". */
+export function dayReadout(words: number, seconds: number, goal: number): { words: string; extra: string } {
+	const min = Math.round(seconds / 60);
+	const parts = min > 0 ? [`${min} min`] : [];
+	parts.push(words >= goal ? "goal reached" : `${Math.round((words / Math.max(1, goal)) * 100)}% of goal`);
+	return { words: `${words.toLocaleString()} ${words === 1 ? "word" : "words"}`, extra: parts.join(" · ") };
+}
