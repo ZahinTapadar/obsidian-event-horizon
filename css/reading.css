@@ -1,0 +1,114 @@
+/* ============================ status bar mode pill ============================ */
+.status-bar-item.eh-mode { display: inline-flex; align-items: center; gap: 5px; padding: 1px 9px; border-radius: 99px; cursor: pointer;
+  background: color-mix(in srgb, var(--eh-accent, #ff5a6f) 10%, transparent); color: var(--text-muted); transition: background .25s ease, color .25s ease; }
+.eh-mode:hover { background: color-mix(in srgb, var(--eh-accent, #ff5a6f) 20%, transparent); color: var(--text-normal); }
+.eh-mode-glyph { color: var(--eh-accent, #ff5a6f); }
+
+/* ============================ reading mode: the book ============================ */
+body.eh-reading {
+  --eh-desk: #15100f; --eh-paper: #f4ecdf;
+  --background-primary: var(--eh-desk); --background-secondary: var(--eh-desk); /* everything but the page becomes desk */ --eh-paper-ink: #2d2522; --eh-paper-soft: #7a685f; --eh-paper-faint: #b3a293; --eh-paper-accent: #a3263a;
+}
+.theme-light.eh-reading { --eh-desk: #cdbcac; --eh-paper: #fbf6ee; }
+body.eh-reading { --eh-edge-1: #e3d8c5; --eh-edge-2: #efe6d6; --eh-edge-3: #d6c9b2; --eh-edge-4: #eadfcd; --eh-edge-5: #cfc1a8; }
+
+/* Night page: the same book, lamp off */
+body.eh-reading.eh-page-night {
+  --eh-desk: #0e0a0b; --eh-paper: #252022; --eh-paper-ink: #ece0e2; --eh-paper-soft: #b9a4aa; --eh-paper-faint: #85727a; --eh-paper-accent: #ff8597;
+  --eh-edge-1: #1c1719; --eh-edge-2: #2c2528; --eh-edge-3: #171315; --eh-edge-4: #29222a; --eh-edge-5: #141012;
+  --text-selection: rgba(255, 133, 151, .22);
+}
+
+/* the app falls away */
+body.eh-reading .workspace-tab-header-container,
+body.eh-reading .workspace-leaf-content[data-type="markdown"] .view-header,
+body.eh-reading .workspace-ribbon,
+body.eh-reading .status-bar > :not(.eh-mode, .eh-page-toggle) { display: none; }
+.eh-page-toggle { display: none; }
+body.eh-reading .status-bar-item.eh-page-toggle { display: inline-flex; align-items: center; gap: 5px; padding: 1px 9px; border-radius: 99px; cursor: pointer; color: var(--text-muted); background: color-mix(in srgb, var(--eh-paper-accent) 12%, transparent); }
+body.eh-reading .status-bar-item.eh-page-toggle:hover { color: var(--text-normal); }
+body.eh-reading .status-bar { background: transparent; backdrop-filter: none; }
+body.eh-reading .workspace-leaf-content[data-type="markdown"] .view-content::before { display: none; } /* no aurora on the desk */
+body.eh-reading .workspace-leaf-content[data-type="markdown"],
+body.eh-reading .workspace-split.mod-root,
+body.eh-reading .workspace-tabs, body.eh-reading .workspace-tab-container {
+  background: radial-gradient(ellipse 70% 60% at 50% 35%, color-mix(in srgb, var(--eh-desk) 80%, #6b4a3a), var(--eh-desk));
+}
+
+/* the page */
+body.eh-reading .markdown-reading-view .markdown-preview-view { background: transparent; padding: 8vh 24px 0; }
+body.eh-reading .markdown-reading-view .markdown-preview-sizer {
+  --eh-ink: var(--eh-paper-ink); --eh-ink-soft: var(--eh-paper-soft); --eh-faint: var(--eh-paper-faint); --eh-line: var(--eh-edge-1);
+  --text-normal: var(--eh-paper-ink); --text-muted: var(--eh-paper-soft); --text-faint: var(--eh-paper-faint);
+  --text-accent: var(--eh-paper-accent); --eh-accent: var(--eh-paper-accent); --link-color: var(--eh-paper-accent);
+  --h1-color: var(--eh-paper-ink); --h2-color: var(--eh-paper-ink); --h3-color: var(--eh-paper-soft);
+  --text-selection: rgba(163, 38, 58, .18);
+  position: relative; max-width: 38em; margin: 0 auto 14vh; padding: 10vh 4.4em 11vh; min-height: 92vh;
+  color: var(--eh-paper-ink);
+  background-color: var(--eh-paper);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.35 0 0 0 0 0.25 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  border-radius: 2px 7px 7px 2px;
+  box-shadow:
+    inset 26px 0 34px -26px rgba(70, 40, 25, .34),      /* gutter */
+    inset -1px 0 0 rgba(255, 255, 255, .5),
+    1px 1px 0 var(--eh-edge-1), 3px 2px 0 var(--eh-edge-2), 4px 3px 0 var(--eh-edge-3), 6px 4px 0 var(--eh-edge-4), 7px 5px 0 var(--eh-edge-5), /* stacked page edges */
+    0 46px 80px -30px rgba(0, 0, 0, .75), 0 14px 30px -12px rgba(0, 0, 0, .45);
+  font-family: "Iowan Old Style", "New York", Palatino, Georgia, serif;
+  font-size: 19px; line-height: 1.62; text-align: justify; hyphens: auto; -webkit-hyphens: auto;
+  font-variant-numeric: oldstyle-nums proportional-nums; font-kerning: normal; text-rendering: optimizeLegibility;
+}
+body.eh-reading:not(.eh-calm) .markdown-reading-view .markdown-preview-sizer { animation: eh-page-in .8s cubic-bezier(.2,.8,.2,1) both; transform-origin: 0% 50%; }
+@keyframes eh-page-in { from { opacity: 0; transform: perspective(1400px) rotateY(-9deg) translateX(18px); filter: blur(2px); } }
+
+/* running head */
+body.eh-reading .markdown-reading-view .markdown-preview-sizer::before {
+  content: var(--eh-running, ""); position: absolute; top: 4.2vh; left: 0; right: 0; text-align: center;
+  font-variant: all-small-caps; letter-spacing: .2em; font-size: 12px; color: var(--eh-paper-faint);
+}
+
+/* chapter opening: title, ornament */
+body.eh-reading { --metadata-display-reading: none; }
+body.eh-reading .frontmatter-container { display: none; }
+body.eh-reading .markdown-reading-view .inline-title {
+  text-align: center; margin: 4vh 0 0; background: none; animation: none;
+  color: var(--eh-paper-ink); -webkit-text-fill-color: currentColor;
+  font-size: 2.3em; font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144, "wght" 360;
+}
+body.eh-reading .inline-title::after { content: "❦"; display: block; font-size: .42em; font-style: normal; color: var(--eh-paper-accent); margin: .7em 0 2.6em; }
+
+/* paragraphs set like a book: no gaps, indented, justified */
+body.eh-reading .markdown-preview-sizer .el-p > p { margin: 0; }
+body.eh-reading .markdown-preview-sizer .el-p > p::before { content: ""; display: inline-block; width: 1.5em; }
+body.eh-reading .markdown-preview-sizer :is(.mod-header, .mod-frontmatter, .el-h1, .el-h2, .el-h3, .el-hr, .el-blockquote, .el-ul, .el-ol) + .el-p > p::before { display: none; }
+body.eh-reading .markdown-preview-sizer :is(.mod-header, .mod-frontmatter, .el-h1, .el-h2, .el-h3, .el-hr) + .el-p > p::first-line { font-variant: small-caps; letter-spacing: .05em; }
+/* the opening paragraph: after the title, or after the hidden frontmatter block when there is one */
+body.eh-reading .markdown-preview-sizer :is(.mod-header, .mod-frontmatter) + .el-p > p::first-letter {
+  float: left; font-family: "Event Horizon Fraunces", "Fraunces", Georgia, serif; font-size: 4.1em; line-height: .8; padding: .07em .09em 0 0;
+  color: var(--eh-paper-accent); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144, "wght" 420;
+}
+body.eh-reading .markdown-preview-sizer :is(h1, h2) { text-align: center; font-variant: small-caps; letter-spacing: .12em; font-style: normal; font-size: 1.15em; margin: 2.6em 0 1.4em; }
+/* as specific as the look's hover rule, and later, so it wins */
+body.eh-reading .markdown-reading-view .markdown-preview-view .markdown-preview-sizer :is(h1, h2)::after { margin-inline: auto; width: 1.4em; background: var(--eh-paper-accent); }
+body.eh-reading .markdown-preview-sizer h3 { text-align: center; font-style: italic; font-size: 1.05em; margin: 2em 0 1em; }
+body.eh-reading .markdown-preview-sizer blockquote { color: var(--eh-paper-soft); text-align: left; margin: 1.4em 1.2em; }
+body.eh-reading .markdown-preview-sizer hr::before { content: "⁂"; color: var(--eh-paper-soft); }
+body.eh-reading .markdown-preview-sizer :is(ul, ol) { text-align: left; }
+body.eh-reading .markdown-preview-sizer a { color: var(--eh-paper-accent); }
+
+/* reading progress + folio */
+.eh-progress { position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 40; pointer-events: none; transform-origin: left; transform: scaleX(var(--p, 0));
+  background: linear-gradient(90deg, var(--eh-paper-accent, #a3263a), #ff6b7f); opacity: 0; transition: transform .15s linear, opacity .4s ease; }
+.eh-folio { position: fixed; bottom: 10px; left: 14px; z-index: 40; pointer-events: none; opacity: 0;
+  padding: 3px 11px 4px; border-radius: 99px; backdrop-filter: blur(10px); background: color-mix(in srgb, var(--eh-desk, #15100f) 55%, transparent);
+  font-family: "Iowan Old Style", Georgia, serif; font-variant: all-small-caps; letter-spacing: .18em; font-size: 12.5px; color: rgba(214, 196, 178, .55);
+  transition: opacity .4s ease; }
+.theme-light .eh-folio { color: rgba(80, 60, 50, .55); }
+body.eh-reading .eh-progress, body.eh-reading .eh-folio { opacity: 1; }
+
+/* phones: a full-width page with lighter margins and shallower edges */
+@media (max-width: 600px) {
+  body.eh-reading .markdown-reading-view .markdown-preview-view { padding: 3vh 10px 0; }
+  body.eh-reading .markdown-reading-view .markdown-preview-sizer { padding: 7vh 1.4em 8vh; font-size: 17px; margin-bottom: 8vh; }
+  body.eh-reading .markdown-reading-view .markdown-preview-sizer::before { top: 2.6vh; font-size: 10.5px; }
+  body.eh-reading .inline-title::after { margin-bottom: 1.8em; }
+}

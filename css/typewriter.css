@@ -1,0 +1,2 @@
+/* Typewriter scrolling: room below the last line so it can sit at the typing position too */
+body.eh-typewriter .markdown-source-view.mod-cm6 .cm-sizer { padding-bottom: 60vh; }

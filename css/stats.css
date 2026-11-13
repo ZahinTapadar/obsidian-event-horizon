@@ -1,0 +1,66 @@
+/* ============================ statistics panel ============================ */
+.theme-light { --eh-h0: #efe4e1; --eh-h1: #ffd3d9; --eh-h2: #ff9aa8; --eh-h3: #ff5a6f; --eh-h4: #c8102e; }
+.theme-dark  { --eh-h0: #2f2629; --eh-h1: #5a2a35; --eh-h2: #8f3446; --eh-h3: #d24a60; --eh-h4: #ff7d8f; }
+
+.workspace-leaf-content .view-content.eh-stats { padding: 22px 20px 40px; font-family: var(--font-text); }
+.eh-eyebrow { font-family: var(--font-interface); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--text-faint); }
+.eh-stats-title { font-family: "Event Horizon Fraunces", "Fraunces", var(--font-text); font-style: italic; font-size: 34px; line-height: 1.1; color: var(--text-normal);
+  font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144, "wght" 380; margin: 2px 0 14px; }
+
+.eh-today { position: relative; width: 168px; height: 168px; margin: 6px auto 18px; }
+.eh-today svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.eh-today circle { fill: none; stroke-width: 5; }
+.eh-big-bg { stroke: var(--eh-h0); }
+.eh-big-fg { stroke-dasharray: var(--dash); stroke-dashoffset: var(--off); stroke: var(--eh-accent, #ff5a6f); stroke-linecap: round; transition: stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1);
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--eh-accent, #ff5a6f) 45%, transparent)); }
+.eh-today-mid { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.eh-today-num { font-family: "Event Horizon Fraunces", "Fraunces", var(--font-text); font-size: 44px; line-height: 1; color: var(--text-normal);
+  font-variation-settings: "SOFT" 100, "WONK" 0, "opsz" 144, "wght" 420; font-variant-numeric: tabular-nums; }
+.eh-today-sub { font-size: 12px; color: var(--text-muted); font-style: italic; margin-top: 4px; }
+
+.eh-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 22px; }
+.eh-tile { padding: 10px 8px 9px; border-radius: 12px; text-align: center; background: color-mix(in srgb, var(--eh-accent, #ff5a6f) 6%, transparent); }
+.eh-tile-value { font-family: "Event Horizon Fraunces", "Fraunces", var(--font-text); font-size: 21px; line-height: 1.1; color: var(--text-normal);
+  font-variation-settings: "SOFT" 100, "opsz" 72, "wght" 450; font-variant-numeric: tabular-nums; }
+.eh-tile-label { font-family: var(--font-interface); font-size: 10px; letter-spacing: .05em; color: var(--text-muted); margin-top: 3px; }
+.eh-tile { transition: transform .3s cubic-bezier(.2,.8,.2,1), background .3s ease; }
+.eh-tile:hover { transform: translateY(-2px); background: color-mix(in srgb, var(--eh-accent, #ff5a6f) 12%, transparent); }
+
+.eh-section { margin-top: 20px; }
+.eh-section-title { font-family: var(--font-interface); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 10px; }
+
+.eh-heat { display: grid; grid-template-rows: repeat(7, 1fr); grid-auto-flow: column; grid-auto-columns: 1fr; gap: 3px; }
+.eh-cell { aspect-ratio: 1; border-radius: 3px; background: var(--eh-h0); }
+.eh-cell.l1 { background: var(--eh-h1); } .eh-cell.l2 { background: var(--eh-h2); }
+.eh-cell.l3 { background: var(--eh-h3); } .eh-cell.l4 { background: var(--eh-h4); box-shadow: 0 0 6px -1px var(--eh-h4); }
+.eh-cell.l-1 { background: transparent; }
+.eh-heat .eh-cell { transition: transform .2s ease; }
+.eh-heat .eh-cell:not(.l-1):hover { transform: scale(1.35); }
+.eh-heat-legend { display: flex; align-items: center; justify-content: flex-end; gap: 3px; margin-top: 8px; font-family: var(--font-interface); font-size: 10px; color: var(--text-faint); }
+.eh-heat-legend .eh-cell { width: 10px; }
+.eh-heat-legend span { margin: 0 4px; }
+
+.eh-bars { position: relative; display: flex; align-items: flex-end; gap: 4px; height: 110px; padding-top: 4px; }
+.eh-bar-col { flex: 1; height: 100%; display: flex; align-items: flex-end; cursor: default; }
+.eh-bar { height: var(--h); width: 100%; min-height: 2px; border-radius: 4px 4px 1px 1px; background: var(--eh-h2); transform-origin: bottom; }
+.eh-bar.is-goal { background: var(--eh-accent, #ff5a6f); }
+.eh-bar-col:hover .eh-bar { background: var(--eh-h3); }
+.eh-bar-col:hover .eh-bar.is-goal { filter: brightness(1.1); }
+.eh-goal-line { bottom: var(--goal); position: absolute; left: 0; right: 0; border-top: 1px dashed var(--text-faint); opacity: .7; pointer-events: none; }
+.eh-goal-line span { position: absolute; right: 0; top: -15px; font-family: var(--font-interface); font-size: 9.5px; color: var(--text-faint); }
+.eh-bars-axis { display: flex; justify-content: space-between; margin-top: 6px; font-family: var(--font-interface); font-size: 10px; color: var(--text-faint); }
+
+.eh-note-name { font-family: "Event Horizon Fraunces", "Fraunces", var(--font-text); font-style: italic; font-size: 18px; color: var(--text-normal); }
+.eh-note-meta { font-size: 12.5px; color: var(--text-muted); margin-top: 2px; }
+
+/* entrance: cells ripple in, bars grow, tiles rise */
+.eh-stats.is-animated .eh-heat .eh-cell { animation: eh-cell-in .5s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--i) * 6ms); }
+.eh-stats.is-animated .eh-bar { animation: eh-bar-in .9s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--i) * 40ms + 200ms); }
+.eh-stats.is-animated .eh-tile { animation: eh-tile-in .6s cubic-bezier(.2,.8,.2,1) both; }
+.eh-stats.is-animated .eh-tile:nth-child(2) { animation-delay: 60ms; } .eh-stats.is-animated .eh-tile:nth-child(3) { animation-delay: 120ms; }
+.eh-stats.is-animated .eh-tile:nth-child(4) { animation-delay: 180ms; } .eh-stats.is-animated .eh-tile:nth-child(5) { animation-delay: 240ms; }
+.eh-stats.is-animated .eh-tile:nth-child(6) { animation-delay: 300ms; }
+@keyframes eh-cell-in { from { opacity: 0; transform: scale(.3); } }
+@keyframes eh-bar-in { from { transform: scaleY(0); } }
+@keyframes eh-tile-in { from { opacity: 0; transform: translateY(10px); } }
+

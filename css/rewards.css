@@ -1,0 +1,80 @@
+/* Rewards: gliding caret, petals, milestones, daily ring */
+.eh-bloom-layer { position: fixed; inset: 0; pointer-events: none; z-index: 10000; overflow: hidden; }
+
+/* gliding caret */
+body.eh-glide .markdown-source-view .cm-cursorLayer { visibility: hidden; }
+.eh-caret {
+  position: fixed; left: 0; top: 0; width: 2px; pointer-events: none; z-index: 30; opacity: 0;
+  transform: translate(var(--eh-cx, 0), var(--eh-cy, 0)); height: var(--eh-ch, 1em);
+  transition: transform .11s cubic-bezier(.2,.8,.2,1), height .11s ease, opacity .18s ease;
+  will-change: transform;
+}
+.eh-caret.no-anim { transition: opacity .18s ease; }
+.eh-caret.is-on { opacity: 1; }
+.eh-caret::after {
+  content: ""; position: absolute; inset: 0; border-radius: 2px;
+  background: var(--eh-accent, #ff5a6f);
+  box-shadow: 0 0 10px var(--eh-accent, #ff5a6f), 0 0 2px var(--eh-accent, #ff5a6f);
+  animation: eh-breathe 1.15s ease-in-out infinite;
+}
+.eh-caret.is-typing::after { animation: none; box-shadow: 0 0 14px var(--eh-accent, #ff5a6f); }
+@keyframes eh-breathe { 50% { opacity: .25; box-shadow: 0 0 2px var(--eh-accent, #ff5a6f); } }
+
+/* petals */
+.eh-p {
+  position: fixed; pointer-events: none; line-height: 1; left: var(--x); top: var(--y);
+  font-size: var(--s, 8px);
+  color: hsl(var(--h, 350) 100% 70%);
+  text-shadow: 0 0 6px currentColor;
+  transform: translate(-50%, -50%);
+  animation: eh-fly var(--t, .7s) cubic-bezier(.15,.7,.3,1) forwards;
+}
+@keyframes eh-fly {
+  0%   { opacity: 0; transform: translate(-50%, -50%) scale(.3) rotate(0deg); }
+  15%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1) rotate(var(--r)); }
+}
+
+/* milestone toast */
+.eh-toast {
+  position: fixed; left: 50%; top: 14%;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  font-family: "Event Horizon Fraunces", "Fraunces", var(--font-text, serif); font-style: italic;
+  font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 72;
+  color: var(--eh-accent, #ff5a6f);
+  text-shadow: 0 0 22px color-mix(in srgb, var(--eh-accent, #ff5a6f) 45%, transparent);
+  animation: eh-toast 2.8s cubic-bezier(.2,.8,.2,1) forwards;
+}
+.eh-orn { font-size: 13px; letter-spacing: .5em; opacity: .75; font-style: normal; }
+.eh-toast-text { font-size: 34px; font-weight: 400; letter-spacing: .01em; }
+.eh-toast-sub { font-size: 14px; opacity: .7; letter-spacing: .2em; text-transform: uppercase; font-style: normal; }
+@keyframes eh-toast {
+  0%   { opacity: 0; transform: translate(-50%, 18px) scale(.92); filter: blur(8px); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 72, "wght" 200; }
+  20%  { opacity: 1; transform: translate(-50%, 0) scale(1); filter: blur(0); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 72, "wght" 500; }
+  75%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -12px) scale(1.03); filter: blur(4px); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 72, "wght" 300; }
+}
+
+/* goal flash */
+.eh-flash {
+  position: fixed; inset: 0;
+  background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--eh-accent, #ff5a6f) 26%, transparent), transparent 62%);
+  animation: eh-flash 1.8s ease-out forwards;
+}
+@keyframes eh-flash { from { opacity: 1; } to { opacity: 0; } }
+
+/* daily ring in the status bar */
+.eh-ring { display: inline-flex; align-items: center; gap: 6px; cursor: default; }
+.eh-ring svg { width: 13px; height: 13px; transform: rotate(-90deg); overflow: visible; }
+.eh-ring circle { fill: none; stroke-width: 2.4; }
+.eh-ring-bg { stroke: color-mix(in srgb, var(--eh-accent, #ff5a6f) 22%, transparent); }
+.eh-ring-fg { stroke-dasharray: var(--dash); stroke-dashoffset: var(--off); stroke: var(--eh-accent, #ff5a6f); stroke-linecap: round; transition: stroke-dashoffset .6s cubic-bezier(.2,.8,.2,1); }
+.eh-ring.is-pulse svg { animation: eh-pulse .9s cubic-bezier(.2,.8,.2,1); }
+.eh-ring.is-done .eh-ring-fg { filter: drop-shadow(0 0 3px var(--eh-accent, #ff5a6f)); }
+.eh-ring.is-done .eh-ring-text { color: var(--eh-accent, #ff5a6f); }
+@keyframes eh-pulse { 40% { transform: rotate(-90deg) scale(1.6); } }
+
+
+
+/* a custom accent from settings wins over the palette, with or without the full look */
+body.eh-custom-accent.theme-light, body.eh-custom-accent.theme-dark { --eh-accent: var(--eh-accent-user); }

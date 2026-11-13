@@ -1,0 +1,10 @@
+{
+	"id": "event-horizon",
+	"name": "Event Horizon",
+	"version": "1.0.0",
+	"minAppVersion": "1.15.0",
+	"description": "Turn your vault into deep space: a dark accretion-disk look, writing rewards, glass reading pages, writing statistics and a living black hole on every new tab.",
+	"author": "Zahin Tapadar",
+	"authorUrl": "https://github.com/ZahinTapadar",
+	"isDesktopOnly": false
+}

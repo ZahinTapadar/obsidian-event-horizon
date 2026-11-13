@@ -1,0 +1,34 @@
+{
+	"name": "obsidian-event-horizon",
+	"version": "1.0.0",
+	"description": "An animated, rewarding writing pad and book-style reader for Obsidian.",
+	"main": "main.js",
+	"scripts": {
+		"build:css": "node scripts/build-css.mjs",
+		"dev": "node scripts/build-css.mjs && node esbuild.config.mjs",
+		"build": "tsc -noEmit -skipLibCheck && node scripts/build-css.mjs && node esbuild.config.mjs production",
+		"test": "node --experimental-strip-types --test tests/*.test.ts"
+	},
+	"keywords": [
+		"obsidian",
+		"writing",
+		"theme",
+		"typewriter",
+		"statistics"
+	],
+	"author": "Zahin Tapadar",
+	"license": "MIT",
+	"devDependencies": {
+		"@codemirror/state": "^6.5.0",
+		"@codemirror/view": "^6.38.0",
+		"@eslint/js": "^9.39.5",
+		"@types/node": "^22.10.0",
+		"esbuild": "^0.24.0",
+		"eslint": "^9.39.5",
+		"eslint-plugin-obsidianmd": "^0.5.1",
+		"obsidian": "latest",
+		"tslib": "^2.8.0",
+		"typescript": "^5.7.0",
+		"typescript-eslint": "^8.72.1"
+	}
+}
