@@ -108,8 +108,13 @@ class Scene {
 		this.greet.setText(h < 5 ? "Deep night" : h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : h < 22 ? "Good evening" : "Late orbit");
 	}
 
+	private last = 0;
+
 	private frame(t: number): void {
 		this.raf = this.win.requestAnimationFrame((n) => this.frame(n));
+		// steps are in 60 Hz frames, so a 120 Hz screen runs at the same speed; capped after a long pause
+		const step = this.last ? Math.min(4, (t - this.last) / (1000 / 60)) : 1;
+		this.last = t;
 		const W = this.el.clientWidth, H = this.el.clientHeight, ctx = this.ctx, img = this.img;
 		if (!W || !H || !ctx) return; // tab hidden behind another one
 		const dpr = Math.min(this.win.devicePixelRatio || 1, 2);
@@ -118,7 +123,7 @@ class Scene {
 			this.cv.height = Math.round(H * dpr);
 		}
 		ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-		if (!this.calm) { this.px += (this.mx - this.px) * 0.04; this.py += (this.my - this.py) * 0.04; }
+		if (!this.calm) { const k = 1 - Math.pow(0.96, step); this.px += (this.mx - this.px) * k; this.py += (this.my - this.py) * k; }
 		const zoom = 1.06 + (this.calm ? 0 : 0.015 * Math.sin(t / 9000));
 		const s = Math.max(W / img.width, H / img.height) * zoom, iw = img.width * s, ih = img.height * s;
 		const ox = (W - iw) / 2 - (this.px - 0.5) * 36, oy = (H - ih) / 2 - (this.py - 0.5) * 22;
@@ -132,8 +137,8 @@ class Scene {
 		ctx.globalAlpha = 1;
 		for (let i = 0; i < this.streaks.length; i++) {
 			const st = this.streaks[i];
-			st.a += this.calm ? st.v * 0.5 : st.v;
-			st.life++;
+			st.a += (this.calm ? st.v * 0.5 : st.v) * step;
+			st.life += step;
 			if (st.life > st.max) { this.streaks[i] = this.streak(); continue; }
 			const fade = Math.min(1, st.life / 60, (st.max - st.life) / 60), k = st.k;
 			const cx = ox + lerp(DISK.cx0, DISK.cx1, k) * iw, cy = oy + lerp(DISK.cy0, DISK.cy1, k) * ih;
