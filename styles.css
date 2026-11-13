@@ -575,7 +575,7 @@ body.eh-on .eh-newtab .eh-q:focus { border-color: rgba(169, 200, 255, .55); back
 body.eh-on .eh-recent { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
 body.eh-on .eh-newtab .eh-recent button { height: auto; padding: 7px 14px; border-radius: 99px; font: inherit; font-size: 13px; color: #d6deec; cursor: pointer;
   background: rgba(8, 10, 16, .46); border: 1px solid rgba(169, 200, 255, .16); box-shadow: none;
-  max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  display: block; max-width: 220px;   /* Obsidian buttons are flex, which ignores text-overflow */ overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); transition: translate .25s cubic-bezier(.2,.7,.2,1), border-color .25s, background .25s; }
 body.eh-on .eh-newtab .eh-recent button:hover { translate: 0 -2px; border-color: rgba(169, 200, 255, .5); background: rgba(20, 26, 40, .6); }
 @keyframes eh-nt-rise { from { opacity: 0; translate: 0 14px; } }
