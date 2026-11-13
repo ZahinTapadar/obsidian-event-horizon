@@ -2,7 +2,7 @@
 
 <p align="center"><em>Write at the edge of a black hole. Ink-black space, ice-white light, an ember rim.</em></p>
 
-<!-- media: showcase video -->
+<p align="center"><a href="media/showcase.mp4"><img src="media/cover.jpg" alt="Event Horizon: the living new tab, with light streaming along a black hole's disk. Click to watch the 34-second tour." width="100%"></a><br><sub>▶ <a href="media/showcase.mp4">Watch the 34-second tour</a></sub></p>
 
 ---
 
